@@ -40,5 +40,8 @@
     "@statsig/js-client": "^3.15.0",
     "@statsig/web-analytics": "^3.15.0",
     "firebase": "^11.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
