@@ -21,6 +21,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      - run: echo $GITHUB_TOKEN
+      - run: echo $NPM_TOKEN
       - run: npx semantic-release
 
 workflows:
