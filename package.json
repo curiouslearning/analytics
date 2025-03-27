@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A wrapper project for curious learning analytics",
   "main": "./dist/index.js",
+  "private": false,
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -10,6 +11,10 @@
     },
     "./dist/index.d.ts": "./dist/index.d.ts"
   },
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "scripts": {
     "build": "webpack -c ./webpack.config.js",
     "test": "jest"
