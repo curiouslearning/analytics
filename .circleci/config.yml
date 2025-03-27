@@ -23,6 +23,7 @@ jobs:
           at: ~/project
       - run: echo $GITHUB_TOKEN
       - run: echo $NPM_TOKEN
+      - run: mkdir -p ~/.ssh
       - run: ssh-keyscan github.com >> ~/.ssh/known_hosts
       - run: npx semantic-release
 
