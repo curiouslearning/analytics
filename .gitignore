@@ -1,0 +1,10 @@
+# build
+dist
+
+# dependencies
+node_modules
+
+# tests
+coverage
+*.lcov
+

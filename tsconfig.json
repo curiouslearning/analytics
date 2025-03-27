@@ -1,0 +1,24 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "./dist",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "module": "ES2022",
+        "target": "es2022",
+        "types": ["jest", "node"],
+        "typeRoots": ["./node_modules/@types"],
+        "lib": ["es2020", "es2022", "dom", "dom.iterable"]
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

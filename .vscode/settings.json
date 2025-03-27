@@ -1,0 +1,12 @@
+{
+    "editor.tabSize": 2,
+    "editor.indentSize": "tabSize",
+    "files.eol": "\n",
+    "[js|ts]": {
+        "editor.tabSize": 2
+    },
+    "[json]": {
+        "editor.tabSize": 4
+    },
+    "typescript.preferences.quoteStyle": "single"
+}

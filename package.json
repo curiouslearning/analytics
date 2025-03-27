@@ -1,0 +1,39 @@
+{
+  "name": "@curiouslearning/analytics",
+  "version": "1.0.0",
+  "description": "A wrapper project for curious learning analytics",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./dist/index.d.ts": "./dist/index.d.ts"
+  },
+  "scripts": {
+    "build": "webpack -c ./webpack.config.js",
+    "test": "jest"
+  },
+  "author": "curiouslearning",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/firebase": "^3.2.3",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.10",
+    "@types/webpack": "^5.28.5",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.2.6",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@statsig/js-client": "^3.15.0",
+    "@statsig/web-analytics": "^3.15.0",
+    "firebase": "^11.4.0"
+  }
+}
