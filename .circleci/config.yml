@@ -9,6 +9,7 @@ jobs:
       - run: sudo npm install -g npm@latest
       - node/install-packages:
           cache-path: ~/project/node_modules
+      - run: npm run build
       - run: mkdir -p ~/.ssh
       - run: ssh-keyscan github.com >> ~/.ssh/known_hosts
       - run: npx semantic-release
