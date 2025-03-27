@@ -30,6 +30,9 @@ workflows:
       - node/test
       - build
       - publish:
+          context:
+            - github-context
+            - npmjs-context
           requires:
             - node/test
             - build
