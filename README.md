@@ -2,7 +2,7 @@
 A wrapper project for curious learning analytics.
 
 # Setup
-Add as node dependency
+Simply add as dependency.
 
 `$ npm i @curiouslearning/analytics`
 
@@ -49,6 +49,37 @@ await statsigStrategy.initialize();
 analytics.register('statsig', statsigStrategy);
 analytics.track('initialized', { test: 'test' }); // fires a tracking event to firebase and statsig
 ```
+
+# Other Use Cases
+## A single strategy trigger
+```
+const firebaseStrategy = analytics.getRegistry('firebase');
+firebaseStrategy.track('test', { test: 'test' });
+```
+
+## A custom strategy
+Make sure to extend the abstract strategy to making sure all necessary implementations are present.
+```
+import { AbstractAnalyticsStrategy } from '@curiouslearning/analytics';
+
+export class CustomStrategy extends AbstractAnalyticsStrategy {
+  async initialize() {
+    // initialization
+  }
+
+  track(evetName: string, data: any) {
+    // do something with eventName and data
+  }
+}
+
+// ..
+const customStrategy = new CustomStrategy();
+await customStrategy.initialize();
+analytics.register('custom', customStrategy);
+
+analytics.track('test', { foo: 'baz' });
+```
+
 
 # Caveats
 We are leaving the configuration option definition on the consuming app layer since we may want to have different buckets or measurement ids for these apps.
