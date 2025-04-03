@@ -6,6 +6,7 @@ Simply add as dependency.
 
 `$ npm i @curiouslearning/analytics`
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/curiouslearning/analytics/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/curiouslearning/analytics/tree/main)
 # Usage
 ```
 import { AnalyticsService, FirebaseStrategy } from '@curiouslearning/analytics';
