@@ -29,7 +29,7 @@ export class FirebaseStrategy extends AbstractAnalyticsStrategy {
     }
   }
 
-  track(eventName: string, params: any) {
+  track(eventName: string, params: any): void {
     logEvent(this.analytics, eventName, params);
   }
 }

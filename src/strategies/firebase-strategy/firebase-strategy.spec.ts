@@ -9,12 +9,12 @@ const MOCK_OPTIONS = {
   firebaseOptions: {}
 };
 
-describe('StatsigStrategy', () => {
+describe('FirebaseStrategy', () => {
   describe('Given MOCK_OPTIONS options', () => {
     const strategy = new FirebaseStrategy(MOCK_OPTIONS);
 
-    describe('When intialized', () => {
-      it('should call initializeAsync()', async () => {
+    describe('When initialized', () => {
+      it('should call initializeApp()', async () => {
         const spy = jest.spyOn(firebaseDefaults, 'initializeApp')
         await strategy.initialize();
         expect(spy).toHaveBeenCalled();
@@ -34,7 +34,7 @@ describe('StatsigStrategy', () => {
     });
 
     describe('When track() is invoked', () => {
-      it('should call client.logEvent()', () => {
+      it('should call logEvent()', () => {
         const spy = jest.spyOn(firebaseAnalyticsDefaults, 'logEvent');
         strategy.track('mock-event', {});
         expect(spy).toHaveBeenCalled();
