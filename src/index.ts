@@ -4,5 +4,5 @@ export * from './strategies/abstract-strategy';
 export * from './strategies/firebase-strategy/firebase-strategy';
 export * from './strategies/statsig-strategy/statsig-strategy';
 export * from './validators';
-export * from './eventSchemas';
+export * from './event-schemas';
 

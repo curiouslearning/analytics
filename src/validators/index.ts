@@ -1,1 +1,1 @@
-export * from './commonParams'; 
+export * from './common-params'; 

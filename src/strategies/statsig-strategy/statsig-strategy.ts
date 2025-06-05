@@ -2,7 +2,7 @@ import { AbstractAnalyticsStrategy } from '../abstract-strategy';
 import { StatsigClient, StatsigOptions, StatsigUser } from '@statsig/js-client';
 import { StatsigAutoCapturePlugin } from '@statsig/web-analytics';
 import { z } from 'zod';
-import { DefaultEventSchemas } from '../../eventSchemas';
+import { DefaultEventSchemas } from '../../event-schemas';
 
 export interface StatsigStrategyOptions {
   clientKey: string;

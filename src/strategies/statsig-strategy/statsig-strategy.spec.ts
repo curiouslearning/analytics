@@ -1,6 +1,6 @@
 import { StatsigClient } from '@statsig/js-client';
 import { StatsigStrategy } from './statsig-strategy';
-import { EventNames } from '../../eventSchemas';
+import { EventNames } from '../../event-schemas';
 
 const MOCK_OPTIONS = {
   clientKey: 'mock-key',
