@@ -8,7 +8,7 @@ Simply add as dependency.
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/curiouslearning/analytics/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/curiouslearning/analytics/tree/main)
 # Usage
-```
+```ts
 import { AnalyticsService, FirebaseStrategy } from '@curiouslearning/analytics';
 
 const analytics = new AnalyticsService();
