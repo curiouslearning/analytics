@@ -1,8 +1,8 @@
-import { AbstractAnalyticsStrategy } from '../abstract-strategy';
-import { StatsigClient, StatsigOptions, StatsigUser } from '@statsig/js-client';
-import { StatsigAutoCapturePlugin } from '@statsig/web-analytics';
-import { z } from 'zod';
-import { DefaultEventSchemas } from '../../event-schemas';
+import { AbstractAnalyticsStrategy } from "../abstract-strategy";
+import { StatsigClient, StatsigOptions, StatsigUser } from "@statsig/js-client";
+import { StatsigAutoCapturePlugin } from "@statsig/web-analytics";
+import { z } from "zod";
+import { DefaultEventSchemas } from "../../event-schemas";
 
 export interface StatsigStrategyOptions {
   clientKey: string;
@@ -13,20 +13,22 @@ export interface StatsigStrategyOptions {
   debug?: boolean; // Add debug mode option
 }
 
+/**
+ * Statsig Strategy Class Definition
+ * This class is used to track events using Statsig.
+ */
 export class StatsigStrategy extends AbstractAnalyticsStrategy {
   client: StatsigClient;
   private eventSchemas: Record<string, z.ZodSchema<any>>;
   private debug: boolean;
 
-  constructor(
-    private options: StatsigStrategyOptions
-  ) {
+  constructor(private options: StatsigStrategyOptions) {
     super();
     this.debug = options.debug ?? false;
     // Merge default schemas with custom schemas, custom schemas take precedence
     this.eventSchemas = {
       ...DefaultEventSchemas,
-      ...options.customEventSchemas
+      ...options.customEventSchemas,
     };
   }
 
@@ -35,12 +37,12 @@ export class StatsigStrategy extends AbstractAnalyticsStrategy {
       const { clientKey, statsigUser, statsigOptions } = this.options;
       const optionsWithAutoCapture = {
         ...statsigOptions,
-        plugins: [new StatsigAutoCapturePlugin()]
-      }
+        plugins: [new StatsigAutoCapturePlugin()],
+      };
       this.client = new StatsigClient(clientKey, statsigUser, optionsWithAutoCapture);
       await this.client.initializeAsync();
     } catch (e) {
-      console.error('Error initializing statsig client. ', e);
+      console.error("Error initializing statsig client. ", e);
       throw e;
     }
   }
@@ -61,11 +63,11 @@ export class StatsigStrategy extends AbstractAnalyticsStrategy {
         isValid = false;
         // Use Zod's formatted error messages
         validationReason = result.error.issues
-          .map(issue => {
-            const path = issue.path.length > 0 ? `${issue.path.join('.')}: ` : '';
+          .map((issue) => {
+            const path = issue.path.length > 0 ? `${issue.path.join(".")}: ` : "";
             return `${path}${issue.message}`;
           })
-          .join('; ');
+          .join("; ");
       } else {
         finalParams = result.data; // Use validated data
       }
@@ -75,7 +77,7 @@ export class StatsigStrategy extends AbstractAnalyticsStrategy {
     const enrichedParams = {
       ...finalParams,
       is_valid: isValid,
-      ...(validationReason && { reason: validationReason })
+      ...(validationReason && { reason: validationReason }),
     };
 
     // Extract value and metadata for Statsig's format
@@ -83,7 +85,13 @@ export class StatsigStrategy extends AbstractAnalyticsStrategy {
     this.client.logEvent({
       eventName,
       value,
-      metadata
+      metadata,
     });
+  }
+
+  dispose(): void {
+    if (this.client) {
+      this.client.shutdown();
+    }
   }
 }
