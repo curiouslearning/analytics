@@ -34,8 +34,7 @@ export const EventNames = {
 
 // Base event schema with fields common to all events
 const baseEventSchema = z.object({
-  event_date: requiredDate('Event date'),
-  event_timestamp: requiredNumber('Event timestamp'),
+  profile_number: requiredNumber('Profile number'),
   cr_user_id: requiredString('CR User ID'),
   ftm_language: requiredString('Language'),
   version_number: requiredString('Version number'),

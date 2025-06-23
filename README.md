@@ -91,8 +91,7 @@ await statsigStrategy.initialize();
 
 // This will be validated against the SESSION_START schema
 statsigStrategy.track(EventNames.SESSION_START, {
-  event_date: '20240315',
-  event_timestamp: 1710633600000,
+  profile_number: 123,
   cr_user_id: 'user123',
   ftm_language: 'en_US',
   version_number: '1.2.3',
@@ -146,21 +145,26 @@ await statsigStrategy.initialize();
 
 // This will be validated against your custom SESSION_START schema
 statsigStrategy.track(EventNames.SESSION_START, {
-  event_date: '20240315',
+  profile_number: 123,
+  cr_user_id: 'user123',
+  ftm_language: 'en_US',
+  version_number: '1.2.3',
+  json_version_number: '2.0.0',
+  days_since_last: 2,
   custom_field: 'my-value'
 });
 ```
 
 # Other Use Cases
 ## A single strategy trigger
-```
+```ts
 const firebaseStrategy = analytics.getRegistry('firebase');
 firebaseStrategy.track('test', { test: 'test' });
 ```
 
 ## A custom strategy
 Make sure to extend the abstract strategy to making sure all necessary implementations are present.
-```
+```ts
 import { AbstractAnalyticsStrategy } from '@curiouslearning/analytics';
 
 export class CustomStrategy extends AbstractAnalyticsStrategy {
@@ -181,6 +185,35 @@ analytics.register('custom', customStrategy);
 analytics.track('test', { foo: 'baz' });
 ```
 
+# Resource Cleanup (`v1.3.0+`)
+Both Firebase and Statsig strategies provide a `dispose` method to properly clean up resources when they are no longer needed. This is particularly important to prevent memory leaks and ensure proper shutdown of connections.
+
+`dispose` has been added in version `1.3.0`.
+
+## Firebase Strategy
+```ts
+const firebaseStrategy = new FirebaseStrategy({
+  // ... configuration ...
+});
+
+// When done with the strategy
+firebaseStrategy.dispose();  // This will delete the Firebase app instance if it exists
+```
+
+## Statsig Strategy
+```ts
+const statsigStrategy = new StatsigStrategy({
+  // ... configuration ...
+});
+
+// When done with the strategy
+statsigStrategy.dispose();  // This will shut down the Statsig client if it exists
+```
+
+It's recommended to call `dispose()` when:
+- Your application is shutting down
+- You're switching to a different analytics strategy
+- You need to reinitialize the strategy with different configuration
 
 # Caveats
 We are leaving the configuration option definition on the consuming app layer since we may want to have different buckets or measurement ids for these apps.

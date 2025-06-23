@@ -14,11 +14,13 @@ const MOCK_OPTIONS = {
 // Mock StatsigClient
 const mockLogEvent = jest.fn();
 const mockInitializeAsync = jest.fn();
+const mockShutdown = jest.fn();
 
 jest.mock('@statsig/js-client', () => ({
   StatsigClient: jest.fn().mockImplementation(() => ({
     logEvent: mockLogEvent,
-    initializeAsync: mockInitializeAsync
+    initializeAsync: mockInitializeAsync,
+    shutdown: mockShutdown
   }))
 }));
 
@@ -28,6 +30,7 @@ describe('StatsigStrategy', () => {
   beforeEach(async () => {
     mockLogEvent.mockClear();
     mockInitializeAsync.mockClear();
+    mockShutdown.mockClear();
     strategy = new StatsigStrategy(MOCK_OPTIONS);
     await strategy.initialize();
   });
@@ -41,8 +44,7 @@ describe('StatsigStrategy', () => {
   describe('Common field validation across all events', () => {
     it('should fail validation for missing cr_user_id consistently', () => {
       const baseIncompleteEvent = {
-        event_date: '20240315',
-        event_timestamp: 1710633600000,
+        profile_number: 123,
         ftm_language: 'en_US',
         version_number: '1.2.3',
         json_version_number: '2.0.0'
@@ -70,8 +72,7 @@ describe('StatsigStrategy', () => {
     describe('session_start', () => {
       it('should validate successful session_start event', () => {
         const validEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -93,8 +94,7 @@ describe('StatsigStrategy', () => {
 
       it('should fail validation for missing days_since_last', () => {
         const invalidEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -118,8 +118,7 @@ describe('StatsigStrategy', () => {
     describe('session_end', () => {
       it('should validate successful session_end event', () => {
         const validEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -141,8 +140,7 @@ describe('StatsigStrategy', () => {
 
       it('should fail validation for missing duration', () => {
         const invalidEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -168,8 +166,7 @@ describe('StatsigStrategy', () => {
     describe('puzzle_completed', () => {
       it('should validate successful puzzle_completed event', () => {
         const validEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -197,8 +194,7 @@ describe('StatsigStrategy', () => {
 
       it('should fail validation for missing puzzle fields', () => {
         const invalidEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -224,8 +220,7 @@ describe('StatsigStrategy', () => {
     describe('selected_level', () => {
       it('should validate successful selected_level event', () => {
         const validEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -247,8 +242,7 @@ describe('StatsigStrategy', () => {
 
       it('should fail validation for missing level_selected', () => {
         const invalidEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -272,8 +266,7 @@ describe('StatsigStrategy', () => {
     describe('level_completed', () => {
       it('should validate successful level_completed event', () => {
         const validEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -298,8 +291,7 @@ describe('StatsigStrategy', () => {
 
       it('should fail validation for missing level completion fields', () => {
         const invalidEvent = {
-          event_date: '20240315',
-          event_timestamp: 1710633600000,
+          profile_number: 123,
           cr_user_id: 'user123',
           ftm_language: 'en_US',
           version_number: '1.2.3',
@@ -324,8 +316,7 @@ describe('StatsigStrategy', () => {
   describe('When tracking download_25 event', () => {
     it('should validate successful download_25 event', () => {
       const validEvent = {
-        event_date: '20240315',
-        event_timestamp: 1710633600000,
+        profile_number: 123,
         cr_user_id: 'user123',
         ftm_language: 'en_US',
         version_number: '1.2.3',
@@ -347,8 +338,7 @@ describe('StatsigStrategy', () => {
 
     it('should fail validation for missing required fields', () => {
       const incompleteEvent = {
-        event_date: '20240315',
-        event_timestamp: 1710633600000
+        profile_number: 123
       };
 
       strategy.track(EventNames.DOWNLOAD_25, incompleteEvent);
@@ -362,6 +352,19 @@ describe('StatsigStrategy', () => {
           reason: expect.stringMatching(/CR User ID is required|Language is required|Version number is required|JSON version number is required|Milliseconds since session start is required/)
         }
       });
+    });
+  });
+
+  describe('When dispose() is called', () => {
+    it('should call shutdown() if client exists', () => {
+      strategy.dispose();
+      expect(mockShutdown).toHaveBeenCalled();
+    });
+
+    it('should not call shutdown() if client does not exist', () => {
+      const newStrategy = new StatsigStrategy(MOCK_OPTIONS);
+      newStrategy.dispose();
+      expect(mockShutdown).not.toHaveBeenCalled();
     });
   });
 });
