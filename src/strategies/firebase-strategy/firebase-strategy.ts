@@ -3,6 +3,7 @@ import { FirebaseApp, FirebaseOptions, initializeApp, deleteApp } from "firebase
 import { Analytics, getAnalytics, logEvent, setUserProperties } from "firebase/analytics";
 
 export interface FirebaseStrategyOptions {
+  firebaseName?: string;
   firebaseOptions: FirebaseOptions;
   userProperties: any;
 }
@@ -21,8 +22,8 @@ export class FirebaseStrategy extends AbstractAnalyticsStrategy {
 
   async initialize() {
     try {
-      const { firebaseOptions, userProperties } = this.options;
-      this.firebaseApp = initializeApp(firebaseOptions);
+      const { firebaseOptions, userProperties, firebaseName } = this.options;
+      this.firebaseApp = initializeApp(firebaseOptions, firebaseName);
       this.analytics = getAnalytics(this.firebaseApp);
       setUserProperties(this.analytics, userProperties, { global: true });
     } catch (error) {
