@@ -3,7 +3,7 @@ import { FirebaseApp, FirebaseOptions, initializeApp, deleteApp } from "firebase
 import { Analytics, getAnalytics, logEvent, setUserProperties } from "firebase/analytics";
 
 export interface FirebaseStrategyOptions {
-  firebaseName?: string;
+  firebaseName: string;
   firebaseOptions: FirebaseOptions;
   userProperties: any;
 }
