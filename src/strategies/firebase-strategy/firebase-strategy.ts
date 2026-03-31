@@ -23,6 +23,10 @@ export class FirebaseStrategy extends AbstractAnalyticsStrategy {
   async initialize() {
     try {
       const { firebaseOptions, userProperties, firebaseName } = this.options;
+      if (!firebaseName?.trim()) {
+        throw new Error("FirebaseStrategyOptions.firebaseName must be a non-empty string.");
+      }
+      
       this.firebaseApp = initializeApp(firebaseOptions, firebaseName);
       this.analytics = getAnalytics(this.firebaseApp);
       setUserProperties(this.analytics, userProperties, { global: true });
