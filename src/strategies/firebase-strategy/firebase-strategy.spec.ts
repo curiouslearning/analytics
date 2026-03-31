@@ -7,6 +7,7 @@ jest.mock('firebase/app');
 jest.mock('firebase/analytics');
 
 const MOCK_OPTIONS = {
+  firebaseName: 'mock-firebase',
   userProperties: {
     userID: 'mock-user-id'
   },
